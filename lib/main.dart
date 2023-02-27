@@ -3,11 +3,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
+import 'connections/connection.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+List tab = ['0', '.', '8'];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,126 +22,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: 'Flutter Bluetooth Serial Demo'),
+      home: MyHomePage(title: '9atrati'),
     );
   }
 }
 
-class MyHomePage extends HookWidget {
-  MyHomePage({super.key, required this.title});
-  final String title;
-
-  List<BluetoothDevice> devices = [];
-
-  @override
-  Widget build(BuildContext context) {
-    final bluetoothEnable = useState(false);
-    final bondedDevices = useState([]);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Column(
-        children: [
-          Card(
-            child: ListTile(
-              title: const Text("BlueTooth Enable"),
-              trailing: ElevatedButton(
-                onPressed: () async {
-                  if (bluetoothEnable.value) return;
-                  await FlutterBluetoothSerial.instance.requestEnable();
-                  final result = await FlutterBluetoothSerial.instance.state;
-                  if (result == BluetoothState.STATE_ON) {
-                    bluetoothEnable.value = true;
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: bluetoothEnable.value
-                      ? Theme.of(context).primaryColor
-                      : Colors.redAccent,
-                ),
-                child: const Icon(Icons.bluetooth),
-              ),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("Bluetooth Status"),
-              trailing: ElevatedButton(
-                onPressed: () async {
-                  await FlutterBluetoothSerial.instance.openSettings();
-                },
-                child: const Icon(Icons.settings_outlined),
-              ),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: const Text("Bonded Devices"),
-              trailing: ElevatedButton(
-                onPressed: () async {
-                  bondedDevices.value =
-                      await FlutterBluetoothSerial.instance.getBondedDevices();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: bondedDevices.value.isNotEmpty
-                      ? Theme.of(context).primaryColor
-                      : Colors.redAccent,
-                ),
-                child: const Icon(Icons.devices),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Bonded Devices"),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: bondedDevices.value.length,
-            itemBuilder: (context, int index) {
-              BluetoothDevice device = bondedDevices.value.elementAt(index);
-              return Card(
-                child: ListTile(
-                  title: Text(device.name ?? ""),
-                  subtitle: Text(device.address),
-                  trailing: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        BluetoothConnection connection =
-                            await BluetoothConnection.toAddress(device.address);
-
-                        if (!connection.isConnected) return;
-                        // ignore: use_build_context_synchronously
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ConnectDevicePage(
-                                      deviceName: device.name ?? "",
-                                      bluetoothConnection: connection,
-                                    )));
-
-                        if (connection.isConnected) {
-                          connection.dispose();
-                          print("connection.dispose()");
-                        }
-                      } catch (exception) {
-                        print('Cannot connect, exception occured');
-                      }
-                    },
-                    child: const Text("Connect"),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ConnectDevicePage extends StatelessWidget {
+class ConnectDevicePage extends StatefulWidget {
   final String deviceName;
   final BluetoothConnection bluetoothConnection;
 
@@ -147,10 +36,15 @@ class ConnectDevicePage extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ConnectDevicePage> createState() => _ConnectDevicePageState();
+}
+
+class _ConnectDevicePageState extends State<ConnectDevicePage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(deviceName),
+        title: Text(widget.deviceName),
       ),
       body: Center(
         child: Column(
@@ -165,10 +59,10 @@ class ConnectDevicePage extends StatelessWidget {
                   height: 100,
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (bluetoothConnection.isConnected) {
-                        bluetoothConnection.output
+                      if (widget.bluetoothConnection.isConnected) {
+                        widget.bluetoothConnection.output
                             .add(utf8.encode("1") as Uint8List);
-                        await bluetoothConnection.output.allSent;
+                        await widget.bluetoothConnection.output.allSent;
                       }
                     },
                     child: const Icon(
@@ -183,10 +77,10 @@ class ConnectDevicePage extends StatelessWidget {
                   height: 100,
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (bluetoothConnection.isConnected) {
-                        bluetoothConnection.output
+                      if (widget.bluetoothConnection.isConnected) {
+                        widget.bluetoothConnection.output
                             .add(utf8.encode("0") as Uint8List);
-                        await bluetoothConnection.output.allSent;
+                        await widget.bluetoothConnection.output.allSent;
                       }
                     },
                     child: const Icon(
@@ -199,23 +93,52 @@ class ConnectDevicePage extends StatelessWidget {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 16.0)),
             StreamBuilder(
-              stream: bluetoothConnection.input,
+              stream: widget.bluetoothConnection.input,
               builder: (context, snapshot) {
                 final String message;
                 if (!snapshot.hasData) {
-                  message = "<<";
+                  message = "All good";
                 } else {
                   print(snapshot.data.toString());
                   message = ascii.decode(snapshot.data as List<int>);
+                  tab = message.split('.');
+                  print(tab);
                 }
-                return Container(
-                  width: 350,
-                  height: 400,
-                  color: Colors.black,
-                  child: Text(
-                    message,
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: tab[0] == '1' ? Colors.red : Colors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          tab[0] == '1' ? 'Fuite' : "All good",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "${tab[1]} litres",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
