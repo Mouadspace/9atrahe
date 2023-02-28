@@ -86,6 +86,7 @@ void loop() {
       digitalWrite(waterPump, HIGH);
       delay(4000);
       digitalWrite(waterPump, LOW);
+      tempConsomation = tempConsomation +2000;
     }
     delay(10);
   }
