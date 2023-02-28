@@ -2,7 +2,7 @@
 #define echo 12
 
 int data = 0;
-int led = 13; // led attach to pin 13
+//int led = 13; // led attach to pin 13
 
 const int buzzer = 9; // attach buzzer to pin 9
 const int waterSensor = A0; // attach sensor to pin a0
@@ -19,7 +19,7 @@ double tempConsomation2 = 0;
 
 
 void setup() {
-  pinMode(led, OUTPUT);
+//  pinMode(led, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(waterSensor, INPUT);
   pinMode(trig, OUTPUT);
@@ -77,9 +77,14 @@ void loop() {
   if (Serial.available() > 0) {
     data = Serial.read();
     if (data == '1') {
-      digitalWrite(led, HIGH);
+      digitalWrite(waterPump, HIGH);
+      delay(2000);
+      digitalWrite(waterPump, LOW);
+      tempConsomation = tempConsomation +1000;
     } else if (data == '0') {
-      digitalWrite(led, LOW);
+      digitalWrite(waterPump, HIGH);
+      delay(4000);
+      digitalWrite(waterPump, LOW);
     }
     delay(10);
   }

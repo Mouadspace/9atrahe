@@ -58,18 +58,14 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
                   width: 100,
                   height: 100,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      if (widget.bluetoothConnection.isConnected) {
-                        widget.bluetoothConnection.output
-                            .add(utf8.encode("1") as Uint8List);
-                        await widget.bluetoothConnection.output.allSent;
-                      }
-                    },
-                    child: const Icon(
-                      Icons.flashlight_on_outlined,
-                      size: 64.0,
-                    ),
-                  ),
+                      onPressed: () async {
+                        if (widget.bluetoothConnection.isConnected) {
+                          widget.bluetoothConnection.output
+                              .add(utf8.encode("1") as Uint8List);
+                          await widget.bluetoothConnection.output.allSent;
+                        }
+                      },
+                      child: const Text("1 litre")),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 8.0)),
                 SizedBox(
@@ -83,10 +79,7 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
                         await widget.bluetoothConnection.output.allSent;
                       }
                     },
-                    child: const Icon(
-                      Icons.flashlight_off_outlined,
-                      size: 64.0,
-                    ),
+                    child: const Text("2 litres"),
                   ),
                 ),
               ],
