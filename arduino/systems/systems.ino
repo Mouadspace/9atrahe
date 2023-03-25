@@ -12,14 +12,14 @@ char buffer[40];
 
 
 int distance = 0, t = 0;
-const int waterPump = 13;
+const int waterPump = 13; 
 int tempConsomation = 0;
 double tempConsomation1 = 0;
 double tempConsomation2 = 0;
 
 
 void setup() {
-//  pinMode(led, OUTPUT);
+  //  pinMode(led, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(waterSensor, INPUT);
   pinMode(trig, OUTPUT);
@@ -60,7 +60,7 @@ void loop() {
     delay(200);
     tone(buzzer, 600, 500);
     isleak = 1;
-    sprintf(buffer, "1.%d", tempConsomation/1000);
+    sprintf(buffer, "1.%d", tempConsomation / 1000);
     Serial.println(buffer);
     delay(500);
 
@@ -68,7 +68,7 @@ void loop() {
   else {
     sprintf(buffer, "0.%d", tempConsomation / 1000);
     Serial.println(buffer);
-     isleak = 0;
+    isleak = 0;
     delay(500);
   }
 
@@ -81,12 +81,15 @@ void loop() {
       digitalWrite(waterPump, HIGH);
       delay(2000);
       digitalWrite(waterPump, LOW);
-      tempConsomation = tempConsomation +1000;
+
+      tempConsomation = tempConsomation + 1000;
+
     } else if (data == '0' && !isleak) {
       digitalWrite(waterPump, HIGH);
       delay(4000);
       digitalWrite(waterPump, LOW);
-      tempConsomation = tempConsomation +2000;
+      tempConsomation = tempConsomation + 2000;
+
     }
     delay(10);
   }

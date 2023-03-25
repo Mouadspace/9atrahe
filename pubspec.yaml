@@ -2,7 +2,7 @@ name: sample_bluetooth_serial
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: ">=2.19.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,12 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_bluetooth_serial: ^0.4.0
   flutter_hooks: ^0.18.5+1
+  flutter_svg: ^2.0.2
+  google_nav_bar: ^5.0.6
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +55,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -64,6 +64,9 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -76,6 +79,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+
   # fonts:
   #   - family: Schyler
   #     fonts:
@@ -90,3 +94,28 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: font\Poppins\Poppins-Regular.ttf
+          weight: 400
+        - asset: font\Poppins\Poppins-Black.ttf
+          weight: 900
+        - asset: font\Poppins\Poppins-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: font\Poppins\Poppins-Bold.ttf
+          weight: 700
+        - asset: font\Poppins\Poppins-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: font\Poppins\Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: font\Poppins\Poppins-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: font\Poppins\Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: font\Poppins\Poppins-ExtraLightItalic.ttf
+          weight: 200
+          style: italic

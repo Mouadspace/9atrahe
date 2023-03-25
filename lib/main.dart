@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import 'connections/connection.dart';
+import 'screnns/base_screen.dart';
+import 'screnns/control_screen.dart';
+import 'screnns/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +23,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Poppins',
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: '9atrati'),
+
+      // home: MyHomePage(title: '9atrati'), //to connect to bluetooth
+      home: BaseScreen(), // ui
     );
   }
 }
@@ -114,7 +120,7 @@ class _ConnectDevicePageState extends State<ConnectDevicePage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     Container(
