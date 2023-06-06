@@ -1,5 +1,5 @@
 # 9atrahe
-'9atrah' basically means ‘drop of water’. It is a solution to the Water scarcity which has caused weak runoffs, a reduction in water supply to dams, and diminished recharge of groundwater .
+'9atrah' basically means ‘drop of water’. It is a solution to the Water scarcity which has caused weak runoffs, a reduction in water supply to dams, and diminished recharge of groundwater in Morroco .
 ## Technologies 
 Flutter & Arduino uno
 
